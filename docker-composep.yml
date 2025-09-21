@@ -1,0 +1,98 @@
+# Maven app + SQL
+
+
+services:
+  webapp:
+    image: your-dockerhub-username/maven-webapp:latest
+    container_name: maven-webapp-mysql
+    ports:
+      - "8081:8080"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: user
+      DB_PASSWORD: userpassword
+      DB_NAME: librarydb
+
+  db:
+    image: mysql:8.0
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: librarydb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: userpassword
+    ports:
+      - "3307:3306"   # mapped to 3307 on host
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
+
+
+# maven app + postgreSQL
+
+services:
+  webapp:
+    image: your-dockerhub-username/maven-webapp:latest
+    container_name: maven-webapp-postgres
+    ports:
+      - "8082:8080"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: user
+      DB_PASSWORD: userpassword
+      DB_NAME: librarydb
+
+  db:
+    image: postgres:15
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: userpassword
+      POSTGRES_DB: librarydb
+    ports:
+      - "5433:5432"   # mapped to 5433 on host
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+
+
+# mavenapp + mongodb 
+services:
+  webapp:
+    image: your-dockerhub-username/maven-webapp:latest
+    container_name: maven-webapp-mongo
+    ports:
+      - "8083:8080"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 27017
+      DB_USER: user
+      DB_PASSWORD: userpassword
+      DB_NAME: librarydb
+
+  db:
+    image: mongo:6.0
+    container_name: mongo-db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: userpassword
+      MONGO_INITDB_DATABASE: librarydb
+    ports:
+      - "27018:27017"   # mapped to 27018 on host
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
